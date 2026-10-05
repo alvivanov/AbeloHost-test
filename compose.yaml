@@ -1,0 +1,44 @@
+services:
+  php:
+    build:
+      context: .
+    container_name: test-project_php
+    ports:
+      - "${APP_SERVER}:80"
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+    environment:
+      PHP_IDE_CONFIG: serverName=test-project
+      XDEBUG_MODE: debug,develop
+      XDEBUG_CLIENT_HOST: host.docker.internal
+      XDEBUG_START_WITH_REQUEST: trigger
+    command: ["composer", "run", "dev"]
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - test-project
+
+  mysql:
+    image: mysql:8.4
+    container_name: test-project_mysql
+    ports:
+      - "${DB_PORT}:3306"
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${DB_USERNAME}", "--password=${DB_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - test-project
+
+networks:
+  test-project:
+    name: test-project
+    driver: bridge

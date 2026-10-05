@@ -1,0 +1,24 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "test-projects/abelo-host",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": "^8.5"
+    },
+    "require-dev": {
+    },
+    "scripts": {
+        "dev": [
+            "php -S 0.0.0.0:80 -t public"
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "process-timeout": 0,
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
