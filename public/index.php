@@ -10,7 +10,7 @@ require_once "../vendor/autoload.php";
 $container = new PhpDiContainerBuilderInterfaceAdapter()->build([
     "../framework/configs/boot.php",
     "../framework/configs/dependencies.php",
-    "../app/configs/dependencies.php",
+    "../configs/dependencies.php",
 ]);
 
 Application::create($container)->start();

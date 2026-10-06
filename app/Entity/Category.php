@@ -1,0 +1,24 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Entity;
+
+final readonly class Category
+{
+    public function __construct(
+        private(set) int $id,
+        private(set) string $name,
+        private(set) string $description,
+    ) {
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'description' => $this->description,
+        ];
+    }
+}
