@@ -8,5 +8,5 @@ use Psr\Log\LoggerInterface;
 
 interface LoggerFactoryInterface
 {
-    public function create(LogDriver $driver, string $level): LoggerInterface;
+    public function create(string $driver, string $level): LoggerInterface;
 }

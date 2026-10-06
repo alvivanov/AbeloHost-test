@@ -13,6 +13,10 @@ services:
       XDEBUG_MODE: debug,develop
       XDEBUG_CLIENT_HOST: host.docker.internal
       XDEBUG_START_WITH_REQUEST: trigger
+      DB_HOST: mysql
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
     command: ["composer", "run", "dev"]
     depends_on:
       mysql:
@@ -30,6 +34,8 @@ services:
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - test-project_mysql_data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${DB_USERNAME}", "--password=${DB_PASSWORD}"]
       interval: 5s
@@ -42,3 +48,6 @@ networks:
   test-project:
     name: test-project
     driver: bridge
+
+volumes:
+  test-project_mysql_data:

@@ -7,7 +7,6 @@ use Framework\ExceptionHandling\ExceptionHandler;
 use Framework\ExceptionHandling\ExceptionHandlerInterface;
 use Framework\Http\Emitter\EmitterInterface;
 use Framework\Http\Emitter\SapiEmitter;
-use Framework\LoggerFactory\LogDriver;
 use Framework\LoggerFactory\LoggerFactoryInterface;
 use Framework\LoggerFactory\MonologLoggerFactory;
 use Framework\Routing\LeagueRouterInterfaceAdapter;
@@ -42,12 +41,23 @@ return [
     RouterInterface::class => get(LeagueRouterInterfaceAdapter::class),
     ExceptionHandlerInterface::class => autowire(ExceptionHandler::class),
     LoggerInterface::class => factory([LoggerFactoryInterface::class, 'create'])
+        ->parameter('driver', get('boot.logDriver'))
         ->parameter('level', get('boot.logLevel')),
     ViewFactoryInterface::class => autowire(SmartyViewFactoryAdapter::class)
         ->constructorParameter('templateDir', get('boot.viewDir'))
         ->constructorParameter('cacheDir', get('boot.cacheDir')),
     LoggerFactoryInterface::class => autowire(MonologLoggerFactory::class)
         ->constructorParameter('logsDir', get('boot.logsDir')),
+    PDO::class => factory(static fn(string $host, string $database, string $username, string $password): PDO => new PDO(
+        "mysql:host={$host};dbname={$database};charset=utf8mb4",
+        $username,
+        $password,
+        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC],
+    ))
+        ->parameter('host', get('db.host'))
+        ->parameter('database', get('db.name'))
+        ->parameter('username', get('db.user'))
+        ->parameter('password', get('db.password')),
     Router::class => static function (ContainerInterface $container): Router {
         $strategy = new ApplicationStrategy();
         $strategy->setContainer($container);

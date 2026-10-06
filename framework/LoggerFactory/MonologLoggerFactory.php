@@ -17,10 +17,10 @@ final class MonologLoggerFactory implements LoggerFactoryInterface
     {
     }
 
-    public function create(LogDriver $driver, string $level): LoggerInterface
+    public function create(string $driver, string $level): LoggerInterface
     {
         return new Logger('app')->pushHandler(
-            $this->createHandler($driver, Level::fromName($level)),
+            $this->createHandler(LogDriver::from($driver), Level::fromName($level)),
         );
     }
 
