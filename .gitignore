@@ -2,6 +2,7 @@
 .idea
 .env
 vendor
+node_modules
 runtime/logs/*
 !runtime/logs/.gitkeep
 runtime/cache/*

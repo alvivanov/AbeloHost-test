@@ -2,6 +2,7 @@
 
 namespace Framework\ViewFactory;
 
+use Framework\Storage\StorageInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
@@ -13,6 +14,7 @@ final class SmartyViewFactoryAdapter implements ViewFactoryInterface
         private Smarty                   $smarty,
         private ResponseFactoryInterface $responseFactory,
         private StreamFactoryInterface   $streamFactory,
+        private StorageInterface         $storage,
         string                           $templateDir,
         string                           $cacheDir
     )
@@ -21,6 +23,11 @@ final class SmartyViewFactoryAdapter implements ViewFactoryInterface
         $this->smarty->setTemplateDir($templateDir);
         $this->smarty->setCompileDir($cacheDir);
         $this->smarty->setConfigDir($cacheDir);
+        $this->smarty->registerPlugin(
+            'modifier',
+            'storage_link',
+            fn (string $path, ?string $default = null): ?string => $this->storage->getLink($path, $default),
+        );
     }
 
     public function create(string $view, array $params): ResponseInterface

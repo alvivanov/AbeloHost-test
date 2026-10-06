@@ -11,6 +11,8 @@ use Framework\LoggerFactory\LoggerFactoryInterface;
 use Framework\LoggerFactory\MonologLoggerFactory;
 use Framework\Routing\LeagueRouterInterfaceAdapter;
 use Framework\Routing\RouterInterface;
+use Framework\Storage\LocalStorage;
+use Framework\Storage\StorageInterface;
 use Framework\ViewFactory\SmartyViewFactoryAdapter;
 use Framework\ViewFactory\ViewFactoryInterface;
 use League\Route\Router;
@@ -40,6 +42,9 @@ return [
     EmitterInterface::class => autowire(SapiEmitter::class),
     RouterInterface::class => get(LeagueRouterInterfaceAdapter::class),
     ExceptionHandlerInterface::class => autowire(ExceptionHandler::class),
+    StorageInterface::class => autowire(LocalStorage::class)
+        ->constructorParameter('storageDir', get('boot.storageDir'))
+        ->constructorParameter('baseUrl', get('boot.appBaseUrl')),
     LoggerInterface::class => factory([LoggerFactoryInterface::class, 'create'])
         ->parameter('driver', get('boot.logDriver'))
         ->parameter('level', get('boot.logLevel')),

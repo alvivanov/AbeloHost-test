@@ -13,11 +13,9 @@ services:
       XDEBUG_MODE: debug,develop
       XDEBUG_CLIENT_HOST: host.docker.internal
       XDEBUG_START_WITH_REQUEST: trigger
-      DB_HOST: mysql
-      DB_DATABASE: ${DB_DATABASE}
-      DB_USERNAME: ${DB_USERNAME}
-      DB_PASSWORD: ${DB_PASSWORD}
     command: ["composer", "run", "dev"]
+    env_file:
+      - .env
     depends_on:
       mysql:
         condition: service_healthy
