@@ -1,7 +1,7 @@
 FROM php:8.5-cli-alpine
 
 RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS linux-headers \
-    && apk add --no-cache unzip \
+    && apk add --no-cache unzip nodejs npm \
     && pecl install xdebug && docker-php-ext-enable xdebug \
     && docker-php-ext-install pdo pdo_mysql \
     && apk del .build-deps \
