@@ -29,7 +29,7 @@
                             <img class="card-img-top" src="{$relatedPost->previewImagePath|storage_link:$postDefaultPreviewImage}" alt="{$relatedPost->title}">
                             <div class="card-body px-0 pb-0">
                                 <p class="meta">{$relatedPost->publishedAt->format('d.m.Y')} · {$relatedPost->viewCount} просмотров</p>
-                                <h3 class="card-title h5"><a href="/categories/{$category->id}/posts/{$relatedPost->id}">{$relatedPost->title}</a></h3>
+                                <h3 class="card-title h5"><a href="/categories/{$relatedPost->mainCategoryId}/posts/{$relatedPost->id}">{$relatedPost->title}</a></h3>
                                 <p class="card-text">{$relatedPost->description}</p>
                             </div>
                         </article>

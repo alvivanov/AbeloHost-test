@@ -36,14 +36,14 @@ INSERT INTO posts (id, image_path, preview_image_path, title, description, conte
     (28, '/post/28/original.webp', '/post/28/preview.webp', 'Супы разных стран мира', 'Сравнение традиционных супов и техник варки.', 'Полный текст статьи про супы разных стран...', 260, '2026-09-29')
 ON DUPLICATE KEY UPDATE title = VALUES(title), image_path = VALUES(image_path), preview_image_path = VALUES(preview_image_path);
 
-INSERT INTO post_categories (post_id, category_id) VALUES
-    (1, 1), (2, 1), (3, 1), (4, 1), (5, 1),
-    (14, 1), (15, 1), (16, 1), (17, 1), (18, 1),
-    (6, 2), (7, 2), (8, 2), (9, 2), (9, 3),
-    (19, 2), (20, 2), (21, 2), (22, 2), (23, 2),
-    (10, 3), (11, 3), (12, 3), (13, 3),
-    (24, 3), (25, 3), (26, 3), (27, 3), (28, 3)
-ON DUPLICATE KEY UPDATE post_id = post_id;
+INSERT INTO post_categories (post_id, category_id, is_main) VALUES
+    (1, 1, 1), (2, 1, 1), (3, 1, 1), (4, 1, 1), (5, 1, 1),
+    (14, 1, 1), (15, 1, 1), (16, 1, 1), (17, 1, 1), (18, 1, 1),
+    (6, 2, 1), (7, 2, 1), (8, 2, 1), (9, 2, 0), (9, 3, 1),
+    (19, 2, 1), (20, 2, 1), (21, 2, 1), (22, 2, 1), (23, 2, 1),
+    (10, 3, 1), (11, 3, 1), (12, 3, 1), (13, 3, 1),
+    (24, 2, 0), (24, 3, 1), (25, 3, 1), (26, 3, 1), (27, 3, 1), (28, 3, 1)
+ON DUPLICATE KEY UPDATE is_main = VALUES(is_main);
 
 INSERT INTO related_posts (post_id, related_post_id)
 SELECT post_id, related_post_id

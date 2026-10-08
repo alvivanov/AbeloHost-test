@@ -19,7 +19,11 @@ final readonly class MysqlPostRepository implements PostRepositoryInterface
 
     public function find(int $id): ?Post
     {
-        $statement = $this->pdo->prepare('SELECT * FROM posts WHERE id = :id');
+        $statement = $this->pdo->prepare(
+            'SELECT p.*, pcm.category_id FROM posts p
+             INNER JOIN post_categories pcm ON pcm.post_id = p.id AND pcm.is_main = 1
+             WHERE p.id = :id',
+        );
         $statement->execute(['id' => $id]);
         $row = $statement->fetch();
 
@@ -38,6 +42,7 @@ final readonly class MysqlPostRepository implements PostRepositoryInterface
             $row['content'],
             (int)$row['view_count'],
             new DateTimeImmutable($row['published_at']),
+            (int)$row['category_id'],
         );
     }
 
@@ -53,8 +58,9 @@ final readonly class MysqlPostRepository implements PostRepositoryInterface
         $offset = max(0, $page - 1) * $limit;
 
         $statement = $this->pdo->prepare(
-            "SELECT p.* FROM posts p
+            "SELECT p.*, pcm.category_id FROM posts p
              INNER JOIN post_categories pc ON pc.post_id = p.id
+             INNER JOIN post_categories pcm ON pcm.post_id = p.id AND pcm.is_main = 1
              WHERE pc.category_id = :categoryId
              ORDER BY p.$sortBy $sortDirection
              LIMIT :limit OFFSET :offset",
@@ -70,8 +76,9 @@ final readonly class MysqlPostRepository implements PostRepositoryInterface
     public function findByIdAndCategoryId(int $id, int $categoryId): ?Post
     {
         $statement = $this->pdo->prepare(
-            'SELECT p.* FROM posts p
+            'SELECT p.*, pcm.category_id FROM posts p
              INNER JOIN post_categories pc ON pc.post_id = p.id
+             INNER JOIN post_categories pcm ON pcm.post_id = p.id AND pcm.is_main = 1
              WHERE p.id = :id AND pc.category_id = :categoryId',
         );
         $statement->execute(['id' => $id, 'categoryId' => $categoryId]);
@@ -95,8 +102,9 @@ final readonly class MysqlPostRepository implements PostRepositoryInterface
     public function findRelatedByPostIdAndCategoryId(int $postId, int $limit): array
     {
         $statement = $this->pdo->prepare(
-            'SELECT p.* FROM posts p
+            'SELECT p.*, pcm.category_id FROM posts p
              INNER JOIN related_posts rp ON rp.related_post_id = p.id
+             INNER JOIN post_categories pcm ON pcm.post_id = p.id AND pcm.is_main = 1
              WHERE rp.post_id = :postId
              ORDER BY p.published_at DESC
              LIMIT :limit',

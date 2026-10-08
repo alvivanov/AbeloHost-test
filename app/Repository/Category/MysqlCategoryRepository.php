@@ -21,15 +21,16 @@ final readonly class MysqlCategoryRepository implements CategoryRepositoryInterf
             'WITH ranked_posts AS (
                 SELECT
                     p.id, p.image_path, p.preview_image_path, p.title, p.description, p.content, p.view_count, p.published_at,
-                    pc.category_id,
+                    pc.category_id, pcm.category_id AS main_category_id,
                     ROW_NUMBER() OVER (PARTITION BY pc.category_id ORDER BY p.published_at DESC) AS rn
                 FROM posts p
                 INNER JOIN post_categories pc ON pc.post_id = p.id
+                INNER JOIN post_categories pcm ON pcm.post_id = p.id AND pcm.is_main = 1
             )
             SELECT
                 c.id AS category_id, c.name AS category_name, c.description AS category_description,
                 rp.id AS post_id, rp.image_path, rp.preview_image_path, rp.title AS post_title, rp.description AS post_description,
-                rp.content AS post_content, rp.view_count, rp.published_at
+                rp.content AS post_content, rp.view_count, rp.published_at, rp.main_category_id
             FROM categories c
             INNER JOIN ranked_posts rp ON rp.category_id = c.id AND rp.rn <= :postLimit
             ORDER BY c.id, rp.published_at DESC',
@@ -60,6 +61,7 @@ final readonly class MysqlCategoryRepository implements CategoryRepositoryInterf
                 $row['post_content'],
                 (int)$row['view_count'],
                 new DateTimeImmutable($row['published_at']),
+                (int)$row['main_category_id'],
             );
         }
 
