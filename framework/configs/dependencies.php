@@ -10,13 +10,13 @@ use Framework\Http\Emitter\SapiEmitter;
 use Framework\LoggerFactory\LoggerFactoryInterface;
 use Framework\LoggerFactory\MonologLoggerFactory;
 use Framework\Routing\LeagueRouterInterfaceAdapter;
+use Framework\Routing\RequestResolvingApplicationStrategy;
 use Framework\Routing\RouterInterface;
 use Framework\Storage\LocalStorage;
 use Framework\Storage\StorageInterface;
 use Framework\ViewFactory\SmartyViewFactoryAdapter;
 use Framework\ViewFactory\ViewFactoryInterface;
 use League\Route\Router;
-use League\Route\Strategy\ApplicationStrategy;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\RequestFactoryInterface;
@@ -64,7 +64,7 @@ return [
         ->parameter('username', get('db.user'))
         ->parameter('password', get('db.password')),
     Router::class => static function (ContainerInterface $container): Router {
-        $strategy = new ApplicationStrategy();
+        $strategy = new RequestResolvingApplicationStrategy();
         $strategy->setContainer($container);
         $router = new Router();
         $router->setStrategy($strategy);

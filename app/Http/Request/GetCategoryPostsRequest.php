@@ -1,0 +1,57 @@
+<?php
+
+namespace App\Http\Request;
+
+use Psr\Http\Message\ServerRequestInterface;
+
+final readonly class GetCategoryPostsRequest
+{
+    private const int PER_PAGE = 2;
+    private const int DEFAULT_PAGE = 1;
+    private const string DEFAULT_SORT_BY = 'published_at';
+    private const string DEFAULT_SORT_DIRECTION = 'DESC';
+
+    public function __construct(private ServerRequestInterface $request)
+    {
+    }
+
+    public function getCategoryId(): ?int
+    {
+        return filter_var($this->request->getAttribute('categoryId'), FILTER_VALIDATE_INT) ?: null;
+    }
+
+    public function getSortBy(): ?string
+    {
+        $value = $this->request->getQueryParams()['sortBy'] ?? null;
+
+        if (!in_array($value, ['view_count', 'published_at'], true)) {
+            $value = self::DEFAULT_SORT_BY;
+        }
+
+        return $value;
+    }
+
+    public function getSortDirection(): ?string
+    {
+        $value = $this->request->getQueryParams()['sortDirection'] ?? null;
+
+        if (!in_array($value, ['ASC', 'DESC'], true)) {
+            $value = self::DEFAULT_SORT_DIRECTION;
+        }
+
+        return $value;
+    }
+
+    public function getPage(): int
+    {
+        return max(
+            filter_var($this->request->getQueryParams()['page'] ?? null, FILTER_VALIDATE_INT) ?: null,
+            self::DEFAULT_PAGE
+        );
+    }
+
+    public function getPerPage(): int
+    {
+        return self::PER_PAGE;
+    }
+}

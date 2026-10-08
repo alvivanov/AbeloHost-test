@@ -9,6 +9,7 @@ use DateTimeImmutable;
 final readonly class Post
 {
     public const string DEFAULT_IMAGE_PREVIEW = '/post/default_preview.png';
+    public const string DEFAULT_IMAGE = '/post/default.png';
 
     public function __construct(
         private(set) int               $id,
