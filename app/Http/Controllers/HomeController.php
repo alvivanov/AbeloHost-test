@@ -14,8 +14,7 @@ final class HomeController
         private readonly ViewFactoryInterface        $viewFactory,
         private readonly CategoryRepositoryInterface $categoryRepository,
         private readonly string                      $defaultPreviewImage,
-    )
-    {
+    ) {
     }
 
     public function index(): ResponseInterface

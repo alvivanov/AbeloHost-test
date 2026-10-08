@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace Framework\Storage;
+
 interface StorageInterface
 {
     public function isFileExists(string $filePath): bool;

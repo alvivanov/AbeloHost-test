@@ -25,7 +25,9 @@
         }
     },
     "scripts": {
-        "dev": "composer i && php -S 0.0.0.0:80 -t public & npm run watch:css"
+        "dev": "composer i && php -S 0.0.0.0:80 -t public & npm run watch:css",
+        "cs": "php-cs-fixer fix",
+        "cs:check": "php-cs-fixer fix --dry-run --diff"
     },
     "config": {
         "optimize-autoloader": true,
@@ -34,5 +36,8 @@
         "sort-packages": true
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.95"
+    }
 }

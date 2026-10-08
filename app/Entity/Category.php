@@ -11,7 +11,6 @@ final readonly class Category
         private(set) string $name,
         private(set) string $description,
         private(set) array  $posts = [],
-    )
-    {
+    ) {
     }
 }

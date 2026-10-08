@@ -7,3 +7,4 @@ runtime/logs/*
 !runtime/logs/.gitkeep
 runtime/cache/*
 !runtime/cache/.gitkeep
+.php-cs-fixer.cache

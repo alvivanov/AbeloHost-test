@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Framework\ViewFactory;
 
 use Framework\Storage\StorageInterface;
@@ -17,8 +19,7 @@ final class SmartyViewFactoryAdapter implements ViewFactoryInterface
         private StorageInterface         $storage,
         string                           $templateDir,
         string                           $cacheDir
-    )
-    {
+    ) {
         $this->smarty->setCacheDir($cacheDir);
         $this->smarty->setTemplateDir($templateDir);
         $this->smarty->setCompileDir($cacheDir);

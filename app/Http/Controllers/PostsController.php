@@ -20,8 +20,7 @@ final class PostsController
         private readonly CategoryRepositoryInterface $categoryRepository,
         private readonly string                      $defaultImage,
         private readonly string                      $defaultPreviewImage,
-    )
-    {
+    ) {
     }
 
     /**

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Repository\Post;
 
 use App\Entity\Post;
-use App\Repository\Category\CategoryRepositoryInterface;
 use DateTimeImmutable;
 use PDO;
 
@@ -48,8 +47,7 @@ final readonly class MysqlPostRepository implements PostRepositoryInterface
         int     $limit,
         ?string $sortBy = null,
         ?string $sortDirection = null
-    ): array
-    {
+    ): array {
         $sortBy = in_array($sortBy, self::SORTABLE_COLUMNS, true) ? $sortBy : 'published_at';
         $sortDirection = in_array($sortDirection, self::SORT_DIRECTIONS, true) ? $sortDirection : 'DESC';
         $offset = max(0, $page - 1) * $limit;

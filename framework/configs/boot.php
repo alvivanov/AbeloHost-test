@@ -15,7 +15,7 @@ return [
     'boot.storageDir' => string('{boot.basePath}/public/storage'),
     'boot.exceptions' => [
         string('{boot.basePath}/framework/configs/exceptions.php'),
-        string('{boot.basePath}/configs/exceptions.php')
+        string('{boot.basePath}/configs/exceptions.php'),
     ],
     'boot.routes' => [string('{boot.basePath}/configs/routes.php')],
 ];

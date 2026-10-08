@@ -17,7 +17,6 @@ final readonly class Post
         private(set) string            $content,
         private(set) int               $viewCount,
         private(set) DateTimeImmutable $publishedAt,
-    )
-    {
+    ) {
     }
 }

@@ -63,7 +63,7 @@ final readonly class MysqlCategoryRepository implements CategoryRepositoryInterf
             );
         }
 
-        return array_map(fn(array $categoryData): Category => $this->hydrate($categoryData), array_values($categoriesData));
+        return array_map(fn (array $categoryData): Category => $this->hydrate($categoryData), array_values($categoriesData));
     }
 
     public function findOne(int $id): ?Category

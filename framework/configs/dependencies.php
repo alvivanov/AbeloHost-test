@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+use function DI\autowire;
+use function DI\factory;
+use function DI\get;
+
 use Framework\Application;
 use Framework\ExceptionHandling\ExceptionHandler;
 use Framework\ExceptionHandling\ExceptionHandlerInterface;
@@ -26,9 +30,6 @@ use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\UploadedFileFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Log\LoggerInterface;
-use function DI\autowire;
-use function DI\factory;
-use function DI\get;
 
 return [
     Application::class => get(Application::class),
@@ -53,7 +54,7 @@ return [
         ->constructorParameter('cacheDir', get('boot.cacheDir')),
     LoggerFactoryInterface::class => autowire(MonologLoggerFactory::class)
         ->constructorParameter('logsDir', get('boot.logsDir')),
-    PDO::class => factory(static fn(string $host, string $database, string $username, string $password): PDO => new PDO(
+    PDO::class => factory(static fn (string $host, string $database, string $username, string $password): PDO => new PDO(
         "mysql:host={$host};dbname={$database};charset=utf8mb4",
         $username,
         $password,

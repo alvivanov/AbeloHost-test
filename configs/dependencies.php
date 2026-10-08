@@ -8,6 +8,7 @@ use App\Repository\Category\CategoryRepositoryInterface;
 use App\Repository\Category\MysqlCategoryRepository;
 use App\Repository\Post\MysqlPostRepository;
 use App\Repository\Post\PostRepositoryInterface;
+
 use function DI\autowire;
 use function DI\get;
 

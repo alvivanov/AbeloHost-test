@@ -81,7 +81,7 @@ final class ExceptionHandler implements ExceptionHandlerInterface
     {
         return array_any(
             $this->dontReport,
-            static fn(string $exceptionClass): bool => $exception instanceof $exceptionClass
+            static fn (string $exceptionClass): bool => $exception instanceof $exceptionClass
         );
     }
 
