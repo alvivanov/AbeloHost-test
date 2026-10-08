@@ -22,3 +22,12 @@ CREATE TABLE IF NOT EXISTS post_categories (
     FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS related_posts (
+                                              post_id INT UNSIGNED NOT NULL,
+                                              related_post_id INT UNSIGNED NOT NULL,
+                                              PRIMARY KEY (post_id, related_post_id),
+    FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
+    FOREIGN KEY (related_post_id) REFERENCES posts(id) ON DELETE CASCADE,
+    CHECK (post_id <> related_post_id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

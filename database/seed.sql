@@ -44,3 +44,17 @@ INSERT INTO post_categories (post_id, category_id) VALUES
     (10, 3), (11, 3), (12, 3), (13, 3),
     (24, 3), (25, 3), (26, 3), (27, 3), (28, 3)
 ON DUPLICATE KEY UPDATE post_id = post_id;
+
+INSERT INTO related_posts (post_id, related_post_id)
+SELECT post_id, related_post_id
+FROM (
+    SELECT post_id, related_post_id,
+           ROW_NUMBER() OVER (PARTITION BY post_id ORDER BY related_post_id) AS rn
+    FROM (
+        SELECT DISTINCT pc.post_id AS post_id, pc2.post_id AS related_post_id
+        FROM post_categories pc
+        INNER JOIN post_categories pc2 ON pc2.category_id = pc.category_id AND pc2.post_id <> pc.post_id
+    ) pairs
+) ranked
+WHERE rn <= 3
+ON DUPLICATE KEY UPDATE post_id = related_posts.post_id;

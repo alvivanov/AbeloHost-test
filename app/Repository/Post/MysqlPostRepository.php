@@ -93,4 +93,20 @@ final readonly class MysqlPostRepository implements PostRepositoryInterface
 
         return (int)$statement->fetchColumn();
     }
+
+    public function findRelatedByPostIdAndCategoryId(int $postId, int $limit): array
+    {
+        $statement = $this->pdo->prepare(
+            'SELECT p.* FROM posts p
+             INNER JOIN related_posts rp ON rp.related_post_id = p.id
+             WHERE rp.post_id = :postId
+             ORDER BY p.published_at DESC
+             LIMIT :limit',
+        );
+        $statement->bindValue('postId', $postId, PDO::PARAM_INT);
+        $statement->bindValue('limit', $limit, PDO::PARAM_INT);
+        $statement->execute();
+
+        return array_map($this->hydrate(...), $statement->fetchAll());
+    }
 }

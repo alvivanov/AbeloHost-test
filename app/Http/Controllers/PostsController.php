@@ -48,6 +48,8 @@ final class PostsController
             'post' => $post,
             'category' => $category,
             'postDefaultImage' => $this->defaultImage,
+            'postDefaultPreviewImage' => $this->defaultPreviewImage,
+            'relatedPosts' => $this->postRepository->findRelatedByPostIdAndCategoryId($postId, 3),
         ]);
     }
 

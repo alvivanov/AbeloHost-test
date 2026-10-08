@@ -22,4 +22,9 @@ interface PostRepositoryInterface
     ): array;
 
     public function getCount(int $categoryId): int;
+
+    /**
+     * @return Post[]
+     */
+    public function findRelatedByPostIdAndCategoryId(int $postId, int $limit): array;
 }
