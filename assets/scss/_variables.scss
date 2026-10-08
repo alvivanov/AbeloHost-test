@@ -1,14 +1,9 @@
-$max-width: 960px;
-$gap: 1rem;
-$radius: 8px;
-$radius-sm: 4px;
+// Mirrors the palette set in _bootstrap-theme.scss (kept separate since Sass
+// modules loaded via @use can't share variables with the @import-based Bootstrap glue).
+$color-accent: #ff8562;
+$color-accent-deep: #df5a35;
+$color-text: #171717;
+$color-muted: #8c8a84;
+$color-border: #ebebe4;
 
-$color-text: #222;
-$color-muted: #666;
-$color-border: #ddd;
-$color-bg: #f5f5f5;
-$color-accent: #333;
-$color-accent-contrast: #fff;
-
-$card-width: 280px;
-$card-image-height: 150px;
+$measure: 640px;

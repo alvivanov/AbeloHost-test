@@ -33,6 +33,7 @@ final readonly class MysqlPostRepository implements PostRepositoryInterface
         return new Post(
             (int)$row['id'],
             $row['image_path'],
+            $row['preview_image_path'],
             $row['title'],
             $row['description'],
             $row['content'],

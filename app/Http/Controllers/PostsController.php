@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Entity\Post;
 use App\Http\Request\GetCategoryPostsRequest;
 use App\Repository\Category\CategoryRepositoryInterface;
 use App\Repository\Post\PostRepositoryInterface;
@@ -19,6 +18,8 @@ final class PostsController
         private readonly ViewFactoryInterface        $viewFactory,
         private readonly PostRepositoryInterface     $postRepository,
         private readonly CategoryRepositoryInterface $categoryRepository,
+        private readonly string                      $defaultImage,
+        private readonly string                      $defaultPreviewImage,
     )
     {
     }
@@ -35,13 +36,18 @@ final class PostsController
             throw new NotFoundException('Post not found');
         }
 
+        if (!$category = $this->categoryRepository->findOne($categoryId)) {
+            throw new NotFoundException('Post not found');
+        }
+
         if (!$post = $this->postRepository->findByIdAndCategoryId($postId, $categoryId)) {
             throw new NotFoundException('Post not found');
         }
 
         return $this->viewFactory->create('post.tpl', [
             'post' => $post,
-            'postDefaultImage' => Post::DEFAULT_IMAGE,
+            'category' => $category,
+            'postDefaultImage' => $this->defaultImage,
         ]);
     }
 
@@ -61,7 +67,7 @@ final class PostsController
             'sortBy' => $request->getSortBy(),
             'sortDirection' => $request->getSortDirection(),
             'page' => $request->getPage(),
-            'postDefaultImage' => Post::DEFAULT_IMAGE_PREVIEW,
+            'postDefaultImage' => $this->defaultPreviewImage,
             'posts' => $this->postRepository->findAllByCategoryIdPaginated(
                 $requestId,
                 $request->getPage(),

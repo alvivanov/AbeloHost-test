@@ -1,31 +1,72 @@
 @use 'variables' as *;
 
-.posts {
-    display: flex;
-    flex-wrap: wrap;
-    gap: $gap;
-}
-
 .post-card {
-    width: $card-width;
-    border: 1px solid $color-border;
-    border-radius: $radius;
-    padding: 0.75rem;
+    background: transparent;
+    height: 100%;
 
-    img {
-        width: 100%;
-        height: $card-image-height;
+    .card-img-top {
+        aspect-ratio: 16 / 10;
         object-fit: cover;
-        border-radius: $radius-sm;
+        transition: opacity 0.2s ease;
+    }
+
+    &:hover .card-img-top {
+        opacity: 0.9;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .card-img-top {
+            transition: none;
+        }
+    }
+
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+    }
+
+    .meta {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .card-title {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        overflow: hidden;
+        min-height: 2.5rem;
+
+        a {
+            color: $color-text;
+
+            &:hover {
+                color: $color-accent;
+            }
+        }
+    }
+
+    .card-text {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+        overflow: hidden;
+        color: $color-muted;
+        margin-bottom: 0;
     }
 }
 
 .all-articles-btn {
     display: inline-block;
-    margin: 1rem 0 2rem;
-    padding: 0.5rem 1rem;
-    background: $color-accent;
-    color: $color-accent-contrast;
-    text-decoration: none;
-    border-radius: $radius-sm;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: $color-accent;
+
+    &:hover {
+        color: $color-accent-deep;
+    }
 }

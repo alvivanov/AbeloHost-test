@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Entity\Category;
-use App\Entity\Post;
 use App\Repository\Category\CategoryRepositoryInterface;
 use Framework\ViewFactory\ViewFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -15,6 +13,7 @@ final class HomeController
     public function __construct(
         private readonly ViewFactoryInterface        $viewFactory,
         private readonly CategoryRepositoryInterface $categoryRepository,
+        private readonly string                      $defaultPreviewImage,
     )
     {
     }
@@ -23,7 +22,7 @@ final class HomeController
     {
         return $this->viewFactory->create('home.tpl', [
             'categoriesWithPosts' => $this->categoryRepository->allWithPostsOrderedByPublishedAt(3),
-            'postDefaultImage' => Post::DEFAULT_IMAGE_PREVIEW,
+            'postDefaultImage' => $this->defaultPreviewImage,
         ]);
     }
 }

@@ -6,7 +6,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 final readonly class GetCategoryPostsRequest
 {
-    private const int PER_PAGE = 2;
+    private const int PER_PAGE = 6;
     private const int DEFAULT_PAGE = 1;
     private const string DEFAULT_SORT_BY = 'published_at';
     private const string DEFAULT_SORT_DIRECTION = 'DESC';

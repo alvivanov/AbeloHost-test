@@ -20,7 +20,7 @@ final readonly class MysqlCategoryRepository implements CategoryRepositoryInterf
         $statement = $this->pdo->prepare(
             'WITH ranked_posts AS (
                 SELECT
-                    p.id, p.image_path, p.title, p.description, p.content, p.view_count, p.published_at,
+                    p.id, p.image_path, p.preview_image_path, p.title, p.description, p.content, p.view_count, p.published_at,
                     pc.category_id,
                     ROW_NUMBER() OVER (PARTITION BY pc.category_id ORDER BY p.published_at DESC) AS rn
                 FROM posts p
@@ -28,7 +28,7 @@ final readonly class MysqlCategoryRepository implements CategoryRepositoryInterf
             )
             SELECT
                 c.id AS category_id, c.name AS category_name, c.description AS category_description,
-                rp.id AS post_id, rp.image_path, rp.title AS post_title, rp.description AS post_description,
+                rp.id AS post_id, rp.image_path, rp.preview_image_path, rp.title AS post_title, rp.description AS post_description,
                 rp.content AS post_content, rp.view_count, rp.published_at
             FROM categories c
             INNER JOIN ranked_posts rp ON rp.category_id = c.id AND rp.rn <= :postLimit
@@ -54,6 +54,7 @@ final readonly class MysqlCategoryRepository implements CategoryRepositoryInterf
             $categoriesData[$categoryId]['posts'][] = new Post(
                 (int)$row['post_id'],
                 $row['image_path'],
+                $row['preview_image_path'],
                 $row['post_title'],
                 $row['post_description'],
                 $row['post_content'],

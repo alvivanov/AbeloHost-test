@@ -12,6 +12,7 @@ $container = new PhpDiContainerBuilderInterfaceAdapter()->build([
     "../framework/configs/dependencies.php",
     "../configs/dependencies.php",
     "../configs/db.php",
+    "../configs/params.php",
 ]);
 
 Application::create($container)->start();

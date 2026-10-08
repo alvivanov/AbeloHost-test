@@ -1,0 +1,38 @@
+// Bootstrap 5 ships as @import-based Sass; this file bridges that into our
+// @use-based build and themes it as "Paper & Coral" instead of default Bootstrap blue.
+
+@import '../../node_modules/bootstrap/scss/functions';
+
+$primary: #ff8562;
+$secondary: #8c8a84;
+$light: #ffffff;
+$dark: #171717;
+
+$body-bg: #ffffff;
+$body-color: #171717;
+$link-color: $primary;
+$link-hover-color: #df5a35;
+$link-decoration: none;
+
+$font-family-sans-serif: 'Open Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+$headings-font-weight: 800;
+$headings-letter-spacing: -0.02em;
+
+$border-color: #ebebe4;
+$border-radius: 0;
+$border-radius-sm: 0;
+$border-radius-lg: 0;
+
+$card-border-width: 0;
+$card-cap-bg: transparent;
+
+$btn-border-radius: 0;
+$btn-font-weight: 700;
+
+$pagination-color: $secondary;
+$pagination-border-radius: 0;
+$pagination-active-bg: $primary;
+$pagination-active-border-color: $primary;
+$pagination-hover-color: $primary;
+
+@import '../../node_modules/bootstrap/scss/bootstrap';

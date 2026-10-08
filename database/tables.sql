@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS categories (
 CREATE TABLE IF NOT EXISTS posts (
                                      id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                      image_path VARCHAR(255) NOT NULL,
+    preview_image_path VARCHAR(255) NOT NULL,
     title VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     content LONGTEXT NOT NULL,
