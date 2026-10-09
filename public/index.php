@@ -15,4 +15,8 @@ $container = new PhpDiContainerBuilderInterfaceAdapter()->build([
     '../configs/params.php',
 ]);
 
-Application::create($container)->start();
+$app = Application::create($container);
+
+$app->renderResponse(
+    $app->handleRequest()
+);

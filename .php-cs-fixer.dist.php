@@ -6,7 +6,7 @@ use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
 
 $finder = Finder::create()
-    ->in([__DIR__ . '/app', __DIR__ . '/framework', __DIR__ . '/configs'])
+    ->in([__DIR__ . '/app', __DIR__ . '/framework', __DIR__ . '/configs', __DIR__ . '/tests'])
     ->append([__DIR__ . '/public/index.php']);
 
 return new Config()

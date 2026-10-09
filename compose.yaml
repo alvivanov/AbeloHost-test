@@ -1,8 +1,8 @@
 services:
-  php:
+  app:
     build:
       context: .
-    container_name: test-project_php
+    container_name: test-project_app
     ports:
       - "${APP_SERVER}:80"
     working_dir: /var/www
@@ -17,14 +17,14 @@ services:
     env_file:
       - .env
     depends_on:
-      mysql:
+      db:
         condition: service_healthy
     networks:
       - test-project
 
-  mysql:
+  db:
     image: mysql:8.4
-    container_name: test-project_mysql
+    container_name: test-project_db
     ports:
       - "${DB_PORT}:3306"
     environment:
@@ -40,6 +40,28 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - test-project
+
+  test-db:
+    image: mysql:8.4
+    container_name: test-project_test-db
+    ports:
+      - "${TEST_DB_PORT}:3306"
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./docker/mysql/conf.d/charset.cnf:/etc/mysql/conf.d/charset.cnf:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${DB_USERNAME}", "--password=${DB_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    env_file:
+      - .env.test
     networks:
       - test-project
 

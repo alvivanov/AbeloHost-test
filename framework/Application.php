@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Framework;
 
+use Dotenv\Dotenv;
 use Framework\ExceptionHandling\ExceptionHandlerInterface;
 use Framework\Http\Emitter\EmitterInterface;
 use Framework\Routing\RouterInterface;
 use Framework\ViewFactory\ViewFactoryInterface;
 use Nyholm\Psr7Server\ServerRequestCreator;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 
 final readonly class Application
@@ -25,6 +28,8 @@ final readonly class Application
         $this->exceptionHandler = $this->container->get(ExceptionHandlerInterface::class);
         $this->emitter = $this->container->get(EmitterInterface::class);
         $this->viewFactory = $this->container->get(ViewFactoryInterface::class);
+
+        $this->boot();
     }
 
     public static function create(ContainerInterface $container): self
@@ -32,16 +37,34 @@ final readonly class Application
         return new self($container);
     }
 
-    public function start(): void
+    public function renderResponse(ResponseInterface $response): void
     {
-        $this->boot();
-        $this->run();
+        $this->emitter->emit($response);
+    }
+
+    public function handleRequest(?ServerRequestInterface $request = null): ResponseInterface
+    {
+        $request ??= $this->container->get(ServerRequestCreator::class)->fromGlobals();
+
+        try {
+            $response = $this->router->handle($request);
+        } catch (Throwable $exception) {
+            $response = $this->exceptionHandler->handle($exception);
+        }
+
+        return $response;
     }
 
     private function boot(): void
     {
+        $this->initEnv($this->container->get('boot.envFile'));
         $this->bootExceptionHandlers($this->container->get('boot.exceptions'));
         $this->bootRoutes($this->container->get('boot.routes'));
+    }
+
+    private function initEnv(string $envFile): void
+    {
+        Dotenv::createUnsafeMutable(dirname($envFile), basename($envFile))->load();
     }
 
     private function bootExceptionHandlers(array $exceptions): void
@@ -66,18 +89,5 @@ final readonly class Application
         foreach ($routes as $route) {
             (require $route)($this->router);
         }
-    }
-
-    private function run(): void
-    {
-        $request = $this->container->get(ServerRequestCreator::class)->fromGlobals();
-
-        try {
-            $response = $this->router->handle($request);
-        } catch (Throwable $exception) {
-            $response = $this->exceptionHandler->handle($exception);
-        }
-
-        $this->emitter->emit($response);
     }
 }
