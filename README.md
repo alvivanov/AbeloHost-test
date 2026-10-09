@@ -37,8 +37,6 @@ tests/          функциональные тесты (PHPUnit), bootstrap.php
    make up
    ```
 
-   Это соберёт образ (`Dockerfile`, PHP 8.5-cli-alpine + Xdebug) и запустит сервисы `app`, `db` и `test-db` (см. `compose.yaml`). Контейнер `app` выполняет `composer run dev`, который ставит зависимости, поднимает встроенный сервер PHP (`0.0.0.0:80`) и запускает вотчер Sass. `db` — основная MySQL, `test-db` — отдельный инстанс MySQL для тестов.
-
 3. Создать схему БД:
 
    ```bash
@@ -51,7 +49,7 @@ tests/          функциональные тесты (PHPUnit), bootstrap.php
    make seed
    ```
 
-5. Приложение будет доступно на `APP_URL` из `.env` (по умолчанию `http://127.0.0.1:9000/`, порт пробрасывается через `APP_SERVER`).
+5. Приложение будет доступно на `APP_URL` из `.env` (по умолчанию `http://127.0.0.1:80/`, порт пробрасывается через `APP_SERVER`).
 
 ### Прочие команды Makefile
 
@@ -78,12 +76,11 @@ make test          # прогнать PHPUnit внутри контейнера 
 См. `.env.example`:
 
 - `COMPOSE_PROJECT_NAME`, `APP_SERVER`, `DB_PORT`, `TEST_DB_PORT` — настройки Docker (порты `db` и `test-db` разведены)
-- `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` — подключение к основной MySQL (`db`)
-- `TEST_DB_DATABASE`, `TEST_DB_USERNAME`, `TEST_DB_PASSWORD` — подключение к тестовой MySQL (`test-db`)
+- `DB_HOST`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` — подключение к основной MySQL (`db`); `DB_HOST` не задан в `.env.example` и по умолчанию равен `db` (см. `configs/db.php`)
+- `TEST_DB_DATABASE`, `TEST_DB_USERNAME`, `TEST_DB_PASSWORD` — подключение к тестовой MySQL (`test-db`) для Docker-сервиса
 - `LOG_LEVEL` — уровень логирования (Monolog)
+- `LOG_DRIVER` — драйвер логирования Monolog (`stdout` по умолчанию, в `.env.example` — `rotating_file`)
 - `APP_URL` — публичный URL приложения
-
-Отдельно `.env.test` (переменные уровня приложения, не Docker) задаёт `DB_HOST=test-db` и те же `DB_DATABASE`/`DB_USERNAME`/`DB_PASSWORD`, что и `TEST_DB_*` в `.env` — ими приложение подключается к `test-db` во время тестов.
 
 ## Маршруты
 
