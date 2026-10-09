@@ -34,7 +34,7 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     volumes:
       - test-project_mysql_data:/var/lib/mysql
-      - ./database/mysql/conf.d/charset.cnf:/etc/mysql/conf.d/charset.cnf:ro
+      - ./docker/mysql/conf.d/charset.cnf:/etc/mysql/conf.d/charset.cnf:ro
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${DB_USERNAME}", "--password=${DB_PASSWORD}"]
       interval: 5s

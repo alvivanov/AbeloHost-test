@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Request;
 
+use League\Route\Http\Exception\NotFoundException;
 use Psr\Http\Message\ServerRequestInterface;
 
 final readonly class GetCategoryPostsRequest
@@ -17,9 +18,13 @@ final readonly class GetCategoryPostsRequest
     {
     }
 
-    public function getCategoryId(): ?int
+    /**
+     * @throws NotFoundException
+     */
+    public function getCategoryId(): int
     {
-        return filter_var($this->request->getAttribute('categoryId'), FILTER_VALIDATE_INT) ?: null;
+        return filter_var($this->request->getAttribute('categoryId'), FILTER_VALIDATE_INT)
+            ?: throw new NotFoundException('Category not found');
     }
 
     public function getSortBy(): ?string

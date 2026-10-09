@@ -20,6 +20,9 @@ final class ExceptionHandler implements ExceptionHandlerInterface
     /** @var list<class-string<Throwable>> */
     private array $dontReport = [];
 
+    /** @var array<class-string<Throwable>, class-string<Throwable>> */
+    private array $exceptionMap = [];
+
     private ?Closure $fallback = null;
 
     public function __construct(private readonly LoggerInterface $logger)
@@ -61,11 +64,31 @@ final class ExceptionHandler implements ExceptionHandlerInterface
         return $this;
     }
 
+    public function mapException(string $exceptionClassFrom, string $exceptionClassTo): self
+    {
+        $this->exceptionMap[$exceptionClassFrom] = $exceptionClassTo;
+
+        return $this;
+    }
+
     public function handle(Throwable $exception): ResponseInterface
     {
+        $exception = $this->resolveMappedException($exception);
+
         $this->report($exception);
 
         return $this->render($exception);
+    }
+
+    private function resolveMappedException(Throwable $exception): Throwable
+    {
+        foreach ($this->exceptionMap as $exceptionClassFrom => $exceptionClassTo) {
+            if ($exception instanceof $exceptionClassFrom) {
+                return new $exceptionClassTo($exception->getMessage(), previous: $exception);
+            }
+        }
+
+        return $exception;
     }
 
     private function report(Throwable $exception): void

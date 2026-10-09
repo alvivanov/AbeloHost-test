@@ -7,6 +7,7 @@ namespace App\Repository\Category;
 use App\Entity\Category;
 use App\Entity\Post;
 use DateTimeImmutable;
+use Framework\Repository\EntityNotFoundException;
 use PDO;
 
 final readonly class MysqlCategoryRepository implements CategoryRepositoryInterface
@@ -65,20 +66,23 @@ final readonly class MysqlCategoryRepository implements CategoryRepositoryInterf
             );
         }
 
-        return array_map(fn (array $categoryData): Category => $this->hydrate($categoryData), array_values($categoriesData));
+        return array_map(
+            fn (array $categoryData): Category => $this->hydrate($categoryData),
+            array_values($categoriesData)
+        );
     }
 
-    public function findOne(int $id): ?Category
+    public function findOne(int $id): Category
     {
         $statement = $this->pdo->prepare('SELECT id, name, description FROM categories WHERE id = :id');
         $statement->execute(['id' => $id]);
         $row = $statement->fetch();
 
-        return $row === false ? null : new Category((int)$row['id'], $row['name'], $row['description']);
+        return $row !== false ? $this->hydrate($row) : throw new EntityNotFoundException('Category not found');
     }
 
     private function hydrate(array $row): Category
     {
-        return new Category((int)$row['id'], $row['name'], $row['description'], $row['posts']);
+        return new Category((int)$row['id'], $row['name'], $row['description'], $row['posts'] ?? []);
     }
 }

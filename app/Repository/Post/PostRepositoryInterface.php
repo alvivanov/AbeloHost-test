@@ -8,7 +8,7 @@ use App\Entity\Post;
 
 interface PostRepositoryInterface
 {
-    public function findByIdAndCategoryId(int $id, int $categoryId): ?Post;
+    public function findByIdAndCategoryId(int $id, int $categoryId): Post;
 
     /**
      * @return Post[]

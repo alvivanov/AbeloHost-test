@@ -6,6 +6,7 @@ namespace App\Repository\Post;
 
 use App\Entity\Post;
 use DateTimeImmutable;
+use Framework\Repository\EntityNotFoundException;
 use PDO;
 
 final readonly class MysqlPostRepository implements PostRepositoryInterface
@@ -17,20 +18,6 @@ final readonly class MysqlPostRepository implements PostRepositoryInterface
     {
     }
 
-    public function find(int $id): ?Post
-    {
-        $statement = $this->pdo->prepare(
-            'SELECT p.*, pcm.category_id FROM posts p
-             INNER JOIN post_categories pcm ON pcm.post_id = p.id AND pcm.is_main = 1
-             WHERE p.id = :id',
-        );
-        $statement->execute(['id' => $id]);
-        $row = $statement->fetch();
-
-        return $row === false ? null : $this->hydrate($row);
-    }
-
-    /** @param array<string, mixed> $row */
     private function hydrate(array $row): Post
     {
         return new Post(
@@ -73,7 +60,7 @@ final readonly class MysqlPostRepository implements PostRepositoryInterface
         return array_map($this->hydrate(...), $statement->fetchAll());
     }
 
-    public function findByIdAndCategoryId(int $id, int $categoryId): ?Post
+    public function findByIdAndCategoryId(int $id, int $categoryId): Post
     {
         $statement = $this->pdo->prepare(
             'SELECT p.*, pcm.category_id FROM posts p
@@ -84,7 +71,7 @@ final readonly class MysqlPostRepository implements PostRepositoryInterface
         $statement->execute(['id' => $id, 'categoryId' => $categoryId]);
         $row = $statement->fetch();
 
-        return $row === false ? null : $this->hydrate($row);
+        return $row !== false ? $this->hydrate($row) : throw new EntityNotFoundException('Post not found');
     }
 
     public function getCount(int $categoryId): int

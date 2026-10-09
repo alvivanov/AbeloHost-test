@@ -8,12 +8,12 @@ use App\Repository\Category\CategoryRepositoryInterface;
 use Framework\ViewFactory\ViewFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 
-final class HomeController
+final readonly class HomeController
 {
     public function __construct(
-        private readonly ViewFactoryInterface        $viewFactory,
-        private readonly CategoryRepositoryInterface $categoryRepository,
-        private readonly string                      $defaultPreviewImage,
+        private ViewFactoryInterface        $viewFactory,
+        private CategoryRepositoryInterface $categoryRepository,
+        private string                      $defaultPreviewImage,
     ) {
     }
 

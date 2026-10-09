@@ -18,4 +18,6 @@ interface ExceptionHandlerInterface
     public function fallback(callable $callback): static;
 
     public function handle(Throwable $exception): mixed;
+
+    public function mapException(string $exceptionClassFrom, string $exceptionClassTo): static;
 }

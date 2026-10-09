@@ -13,5 +13,5 @@ interface CategoryRepositoryInterface
      */
     public function allWithPostsOrderedByPublishedAt(int $postLimit): array;
 
-    public function findOne(int $id): ?Category;
+    public function findOne(int $id): Category;
 }
