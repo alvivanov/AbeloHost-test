@@ -10,6 +10,7 @@ up:
 	@echo "==> Starting containers..."
 	docker compose up --build -d
 	@echo "==> Containers are up."
+	$(MAKE) init-db
 
 init-db:
 	@echo "==> Creating database schema from database/tables.sql..."
