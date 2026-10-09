@@ -24,6 +24,8 @@ final readonly class Application
 
     private function __construct(private ContainerInterface $container)
     {
+        $this->initEnv($this->container->get('boot.envFile'));
+
         $this->router = $this->container->get(RouterInterface::class);
         $this->exceptionHandler = $this->container->get(ExceptionHandlerInterface::class);
         $this->emitter = $this->container->get(EmitterInterface::class);
@@ -57,7 +59,6 @@ final readonly class Application
 
     private function boot(): void
     {
-        $this->initEnv($this->container->get('boot.envFile'));
         $this->bootExceptionHandlers($this->container->get('boot.exceptions'));
         $this->bootRoutes($this->container->get('boot.routes'));
     }
